@@ -9,9 +9,6 @@ class App:
     """ Main Application """
 
     def __init__(self):
-        if not os.getenv('DISPLAY'): 
-            # prevents pyautogui errors in github actions, normally set by your OS
-            os.environ['DISPLAY'] = ':0'
         os.environ["VERSION"] = "0.1.0" # will use dotenv for a config file in the near future
         self.gui = GUI()
         self.gui.createLabel(text="Screenshot and select Kanji to export to Anki")

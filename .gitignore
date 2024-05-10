@@ -2,6 +2,4 @@
 venv
 __pycache__
 .pytest_cache
-
-# For working with older files in a testing project, will be removed in the future.
-appwrapper 
+img

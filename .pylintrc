@@ -1,0 +1,7 @@
+[MAIN]
+
+# Ignore files/directories. No spaces, comma seperated.
+ignore=tests
+
+# C0103: Naming conventions because I am NOT naming functions with snake case.
+disable=C0103

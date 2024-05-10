@@ -1,3 +1,5 @@
+""" GUI for Kanji App, contains GUI functions and some other things that should be seperated in the future """
+
 from tkinter import Tk, Label, Button, Misc, Image, Toplevel, Canvas, NW
 from PIL import ImageTk
 from PIL import Image as IM
@@ -39,7 +41,12 @@ class GUI(Tk):
         label.pack(side="left", fill="both")
         self.components.append(label)
 
-    def createMenuButton(self, master:Misc=None, text:str="Button", action:callable=None, bgcolor:str="ivory2") -> None:
+    def createMenuButton(self,
+                         master:Misc=None,
+                         text:str="Button",
+                         action:callable=None,
+                         bgcolor:str="ivory2"
+                         ) -> None:
         """ Creates a label widget """
         if master == None:
             master = self

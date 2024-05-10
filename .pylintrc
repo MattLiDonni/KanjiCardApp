@@ -1,0 +1,4 @@
+[MAIN]
+
+# Ignore files/directories. No spaces, comma seperated.
+ignore=tests

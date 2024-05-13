@@ -3,7 +3,8 @@ import os
 import sys
 import time
 from kanjiapp.gui import GUI
-from kanjiapp.util import ImageHandler
+from kanjiapp.util import ImageHandler, Screenshot
+from kanjiapp.kanji import Kanji, KanjiLibrary
 
 class App:
     """ Main Application """
@@ -19,11 +20,18 @@ class App:
         )
         self.gui.createMenuButton(text="Export", action=self.exportButtonAction)
         self.gui.createMenuButton(text="Exit", action=self.exitButtonAction)
-        self.img = None
+        self.current_screenshot: Screenshot
+        self.kanji = []
 
     def start(self):
         """ Start program execution """
         self.gui.start()
+
+    def finishSelection(self):
+        for coordinates in self.current_screenshot.selections:
+            crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
+            self.kanji.append(Kanji("雨", "rain", ["ウ"], ["あめ", "あま"], crop=crop))
+        print(self.kanji)
 
     ######## Button actions ########
     def screenshotButtonAction(self):
@@ -32,9 +40,9 @@ class App:
         Takes screenshot, then creates second window for screenshot handling."""
         self.gui.minimize()
         time.sleep(0.3)
-        self.img = ImageHandler.takeScreenshot()
+        self.current_screenshot = Screenshot(ImageHandler.takeScreenshot())
         self.gui.restore()
-        self.gui.screenshotEditor(title="Click & Drag to select Kanji", image=self.img)
+        self.gui.screenshotEditor(title="Click & Drag to select Kanji", screenshot=self.current_screenshot, onfinish=self.finishSelection)
 
     def exportButtonAction(self):
         """ Export Button Event """

@@ -4,7 +4,7 @@ from tkinter import Tk, Label, Button, Misc, Image, Toplevel, Canvas, NW
 from PIL import ImageTk
 from PIL import Image as IM
 import os
-from kanjiapp.util import MouseHandler, ImageHandler
+from kanjiapp.util import MouseHandler, ImageHandler, Screenshot
 
 class GUI(Tk):
     """ Extends Tk() from tkinter, adds custom functionality for Kanji App """
@@ -17,6 +17,7 @@ class GUI(Tk):
             + "+" + str(int(self.winfo_screenheight()/3))
         self.geometry(geometry)
         self.components = []
+        self.screenshot: Screenshot
 
         # For Canvas
         self.rects = []
@@ -24,6 +25,7 @@ class GUI(Tk):
         self.mouseStartPos = tuple()
         self.mouseCurrentPos = tuple()
         self.mouseReleasePos = tuple()
+        self.onfinish:callable = None
 
     def start(self) -> None:
         """ Start the GUI """
@@ -57,23 +59,26 @@ class GUI(Tk):
         button.pack(fill="both", expand=True)
         self.components.append(button)
 
-    def screenshotEditor(self, image=Image, master:Misc=None, title:str="Secondary Window", fullscreen:bool=True):
+    def screenshotEditor(self, screenshot: Screenshot, master:Misc=None, title:str="Secondary Window", fullscreen:bool=True, onfinish:callable=None):
         """ Creates another window for editing/selecting from screenshots """
+        self.screenshot = screenshot
         self.screenshotWindow = Toplevel(master=self)
         self.screenshotWindow.title(title)
-        self.image = image # Need to save both parts of the image or it will not work
-        self.imagetk = ImageTk.PhotoImage(image=self.image)
-        self.canvas = Canvas(master=self.screenshotWindow, width=self.image.width, height=self.image.height, bd=0, highlightthickness=0)
+        self.onfinish = onfinish
+        self.canvas = Canvas(master=self.screenshotWindow, width=self.screenshot.image.width, height=self.screenshot.image.height, bd=0, highlightthickness=0)
+        self.canvas.pack_propagate(False)
+        Label(master=self.canvas, text="Click and drag with Mouse 1 to select.\nUndo with Mouse 2\n Esc to finish").pack(side='top')
         self.canvas.pack(padx=0, pady=0, ipadx=0, ipady=0)
-        self.canvas.create_image(0,0,anchor=NW,image=self.imagetk)
+        self.canvas.create_image(0,0,anchor=NW,image=self.screenshot.getImageTk())
 
         # Mouse Binds
+        # TODO VVV have these defined outside of GUI maybe, and make these point to those functions VVV
         self.screenshotWindow.bind("<ButtonPress-1>", self.leftClick)
         self.screenshotWindow.bind("<ButtonPress-3>", self.rightClick)
         self.screenshotWindow.bind("<ButtonRelease-1>", self.release)
         self.screenshotWindow.bind("<B1-Motion>", self.motion)
+        self.screenshotWindow.bind("<Escape>", self.esc)
 
-        
         self.screenshotWindow.attributes("-fullscreen", True)
 
 
@@ -86,6 +91,7 @@ class GUI(Tk):
         print(self.rects)
         if len(self.rects) > 0:
             self.canvas.delete(self.rects.pop())
+            self.screenshot.popSelection()
 
     def release(self, event):
         if self.drawingRect:
@@ -93,14 +99,29 @@ class GUI(Tk):
             self.drawingRect = None
         self.mouseReleasePos = MouseHandler.release(event)
         self.rects.append(self.canvas.create_rectangle(self.mouseStartPos, self.mouseReleasePos, fill='', outline="#00ffff", width=2))
-        # TODO Replace with screenshot image
-        ImageHandler.cropImage(IM.open("img/screenshot.png", "r", ["PNG"]), *self.mouseStartPos + self.mouseReleasePos).save("img/crop.png")
+    
+        self.screenshot.addSelection(*self.mouseStartPos + self.mouseReleasePos)
 
     def motion(self, event):
         if self.drawingRect:
             self.canvas.delete(self.drawingRect)
         self.mouseCurrentPos = MouseHandler.mouseMotion(event)
         self.drawingRect = self.canvas.create_rectangle(self.mouseStartPos, self.mouseCurrentPos, fill='', outline="#00ffff", width=2)
+
+    def esc(self, event):
+        self.screenshotWindow.attributes("-fullscreen", False)
+        
+        # Reset all values
+        self.rects = []
+        self.drawingRect = None
+        self.mouseStartPos = tuple()
+        self.mouseCurrentPos = tuple()
+        self.mouseReleasePos = tuple()
+        # Destroy window
+        self.screenshotWindow.destroy()
+        self.screenshotWindow = None
+        self.onfinish()
+
     #### Functionality ####
 
     def minimize(self):

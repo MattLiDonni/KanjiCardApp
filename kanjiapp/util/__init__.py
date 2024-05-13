@@ -1,6 +1,29 @@
 """ Simpler functions that are easier to seperate to prevent cluttering other classes """
 import pyautogui
-from PIL import Image
+from PIL import Image, ImageTk
+from typing import List
+
+class Screenshot:
+
+    def __init__(self, image:Image):
+        self.image = image
+        self.imagetk = ImageTk.PhotoImage(image=self.image)
+        self.selections: List[tuple] = []
+
+    def getImageTk(self) -> ImageTk.PhotoImage:
+        return self.imagetk
+
+    def addSelection(self, x0:int, y0:int, x1:int, y1:int) -> bool:
+        coordinates = ImageHandler.coordinate_correction(x0, y0, x1, y1)
+        self.selections.append(coordinates)
+        return True
+    
+    def getSelections(self) -> List[tuple]:
+        return self.selections
+
+    def popSelection(self) -> tuple:
+        return self.selections.pop()
+
 
 class ImageHandler:
     """ Handles screenshotting and images """
@@ -8,7 +31,6 @@ class ImageHandler:
     def takeScreenshot() -> Image.Image:
         img = pyautogui.screenshot()
         print(type(img))
-        img.save("img/screenshot.png")
         return img
 
     @staticmethod

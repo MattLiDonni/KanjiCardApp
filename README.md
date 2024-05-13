@@ -15,13 +15,12 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
 - Screenshot display
 - Click and drag selection of Kanji (Similar to rectangle select in Snipping Tool)
   - Click and drag to select characters, right click to undo
-  - Saves to a folder 'img' at run location, but currently deletes previous selection)
 
 ### Features needed to be considered finished:
 
 - .env file with configurations
-- Improve Image Handling
-  - Current implementation is for testing, saves over images
+- ~~Improve Image Handling~~ Done
+  - ~~Current implementation is for testing, saves over images~~
 - OCR character recognition
   - PyTesseract, currently working in a version on the side but yet to be integrated
 - Dictionary lookup for Meanings, Vocab, Onyomi/Kunyomi readings, and any other information

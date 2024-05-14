@@ -6,4 +6,6 @@ class KanjiReader:
 
     @staticmethod
     def read_image(image: Image):
-        return pytesseract.image_to_string(image, config=os.environ["PYTESSERACT_CONFIG"]).strip('\n')
+        """ Read the text from the image and return without whitespace """
+        return pytesseract.image_to_string(image, config=os.environ["PYTESSERACT_CONFIG"])\
+            .strip().replace('\n', '') # Remove \n for newlines

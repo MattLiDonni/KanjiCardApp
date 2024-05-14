@@ -2,15 +2,18 @@
 import os
 import sys
 import time
+from dotenv import load_dotenv
 from kanjiapp.gui import GUI
 from kanjiapp.util import ImageHandler, Screenshot
 from kanjiapp.kanji import Kanji, KanjiLibrary
+from kanjiapp.ocr import KanjiReader
 
 class App:
     """ Main Application """
 
     def __init__(self):
-        os.environ["VERSION"] = "0.1.0" # will use dotenv for a config file in the near future
+        load_dotenv()
+        os.environ["VERSION"] = "0.1.0" # feeling dumb realizing .env for version number doesn't make sense...
         self.gui = GUI()
         self.gui.createLabel(text="Screenshot and select Kanji to export to Anki")
         self.gui.createMenuButton(
@@ -28,9 +31,10 @@ class App:
         self.gui.start()
 
     def finishSelection(self):
+        """ Callback function from screenshot-selection window """
         for coordinates in self.current_screenshot.selections:
             crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
-            self.kanji.append(Kanji("雨", "rain", ["ウ"], ["あめ", "あま"], crop=crop))
+            self.kanji.append(KanjiReader.read_image(crop))
         print(self.kanji)
 
     ######## Button actions ########

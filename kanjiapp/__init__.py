@@ -7,6 +7,7 @@ from kanjiapp.gui import GUI
 from kanjiapp.util import ImageHandler, Screenshot
 from kanjiapp.kanji import Kanji, KanjiLibrary
 from kanjiapp.ocr import KanjiReader
+from kanjiapp.dictionary import KanjiLookup
 
 class App:
     """ Main Application """
@@ -35,7 +36,9 @@ class App:
         for coordinates in self.current_screenshot.selections:
             crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
             self.kanji.append(KanjiReader.read_image(crop))
-        print(self.kanji)
+        for k in self.kanji:
+            print(KanjiLookup.define(k))
+        
 
     ######## Button actions ########
     def screenshotButtonAction(self):

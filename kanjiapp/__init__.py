@@ -37,8 +37,10 @@ class App:
             crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
             self.kanji.append(KanjiReader.read_image(crop))
         for k in self.kanji:
-            print(KanjiLookup.define(k))
-        
+            try:
+                print(KanjiLookup.define(k))
+            except ValueError:
+                print("No Kanji recognized in this image")
 
     ######## Button actions ########
     def screenshotButtonAction(self):

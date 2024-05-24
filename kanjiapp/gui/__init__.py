@@ -70,6 +70,7 @@ class GUI(Tk):
         Label(master=self.canvas, text="Click and drag with Mouse 1 to select.\nUndo with Mouse 2\n Esc to finish").pack(side='top')
         self.canvas.pack(padx=0, pady=0, ipadx=0, ipady=0)
         self.canvas.create_image(0,0,anchor=NW,image=self.screenshot.getImageTk())
+        self.screenshotWindow.focus_set()
 
         # Mouse Binds
         # TODO VVV have these defined outside of GUI maybe, and make these point to those functions VVV
@@ -98,9 +99,9 @@ class GUI(Tk):
             self.canvas.delete(self.drawingRect)
             self.drawingRect = None
         self.mouseReleasePos = MouseHandler.release(event)
-        self.rects.append(self.canvas.create_rectangle(self.mouseStartPos, self.mouseReleasePos, fill='', outline="#00ffff", width=2))
-    
-        self.screenshot.addSelection(*self.mouseStartPos + self.mouseReleasePos)
+        if self.mouseStartPos[0] != self.mouseReleasePos[0] and self.mouseStartPos[1] != self.mouseReleasePos[1]: # if its not a box then dont save it.
+            self.rects.append(self.canvas.create_rectangle(self.mouseStartPos, self.mouseReleasePos, fill='', outline="#00ffff", width=2))
+            self.screenshot.addSelection(*self.mouseStartPos + self.mouseReleasePos)
 
     def motion(self, event):
         if self.drawingRect:

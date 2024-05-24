@@ -47,8 +47,11 @@ I am not liable for anything that breaks, including any lost files or damage tha
 
 ### To use:
 
-- Pull repo
-- Create virtual environment
-- Enable virtual environment
-- Install requirements from requirements.txt
-- run main.py
+Windows:
+
+- Clone repo `git clone https://github.com/MattLiDonni/KanjiCardApp`
+- Create virtual environment `python -m venv venv`
+- Enable virtual environment `venv/Scripts/activate`
+- Install wheel `pip install wheel`
+- Install requirements from requirements.txt `pip install -r requirements.txt`
+- run main.py `python main.py`

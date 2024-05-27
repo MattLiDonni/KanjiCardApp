@@ -14,26 +14,26 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
 - Tests are failing in Github Actions since a virtual display is needed for many functionalities, testing currently with pyvirtualdisplay
   - Currently put off to work on other features, will possibly change existing features to allow testing without the need for a virtual display.
 
-### Features completed:
+### Feature progress:
 
-- Simple tkinter GUI
-- Screenshot display
+- Simple tkinter GUI (Done, needs overhaul in near future)
+- Screenshot and display on a window (Done)
 - Click and drag selection of Kanji (Similar to rectangle select in Snipping Tool)
   - Click and drag to select characters, right click to undo
-- Improve Image Handling
 - OCR character recognition (PyTesseract)
 - Dictionary lookup for Meanings, readings (JamDict)
 
 ### Features needed to be considered finished:
 
 - Flesh out .env file with configurations
-- Get related vocab
+- Add related vocab
 - Export Kanji to file for Anki flashcard deck
 - Interactable menu of currently selected Kanji
 - Logging
 
 ### Potential features after being finished:
 
+- Visual overhaul
 - Settings menu
 - Selected Kanji menu additions
   - Option to view the cropped image to compare to what the OCR returned

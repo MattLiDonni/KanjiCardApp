@@ -5,7 +5,7 @@ class KanjiLookup:
     jam = Jamdict()
 
     @classmethod
-    def define(cls, text:str):
+    def define(cls, text:str) -> Kanji:
         result = cls.jam.lookup(text)
         kanji = Kanji(character=text)
 

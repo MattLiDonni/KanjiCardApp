@@ -82,6 +82,9 @@ class GUI(Tk):
 
         self.screenshotWindow.attributes("-fullscreen", True)
 
+    def kanjiViewer(self):
+        pass
+
 
     # Mouse bind events
 

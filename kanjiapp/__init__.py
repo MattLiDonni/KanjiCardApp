@@ -14,7 +14,7 @@ class App:
 
     def __init__(self):
         load_dotenv()
-        os.environ["VERSION"] = "0.1.0" # feeling dumb realizing .env for version number doesn't make sense...
+        os.environ["VERSION"] = "0.1.0"
         self.gui = GUI()
         self.gui.createLabel(text="Screenshot and select Kanji to export to Anki")
         self.gui.createMenuButton(
@@ -22,10 +22,10 @@ class App:
             action=self.screenshotButtonAction,
             bgcolor="OliveDrab1"
         )
+        self.gui.createMenuButton(text="Kanji", action=self.gui.kanjiViewer)
         self.gui.createMenuButton(text="Export", action=self.exportButtonAction)
         self.gui.createMenuButton(text="Exit", action=self.exitButtonAction)
-        self.current_screenshot: Screenshot
-        self.kanji = []
+        self.current_screenshot: Screenshot = None
 
     def start(self):
         """ Start program execution """
@@ -35,12 +35,12 @@ class App:
         """ Callback function from screenshot-selection window """
         for coordinates in self.current_screenshot.selections:
             crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
-            self.kanji.append(KanjiReader.read_image(crop))
-        for k in self.kanji:
-            try:
-                print(KanjiLookup.define(k))
-            except ValueError:
-                print("No Kanji recognized in this image")
+            character = KanjiReader.read_image(crop)
+            KanjiLibrary.add(KanjiLookup.define(character))
+        
+        print(KanjiLibrary.kanji)
+            
+            
 
     ######## Button actions ########
     def screenshotButtonAction(self):

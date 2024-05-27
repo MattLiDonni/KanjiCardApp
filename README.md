@@ -11,24 +11,23 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
 
 ### Current Issues:
 
-- Tests are failing since a virtual display is needed for many functionalities, testing currently with pyvirtualdisplay
+- Tests are failing in Github Actions since a virtual display is needed for many functionalities, testing currently with pyvirtualdisplay
+  - Currently put off to work on other features, will possibly change existing features to allow testing without the need for a virtual display.
 
-### Features so far:
+### Features completed:
 
 - Simple tkinter GUI
 - Screenshot display
 - Click and drag selection of Kanji (Similar to rectangle select in Snipping Tool)
   - Click and drag to select characters, right click to undo
+- Improve Image Handling
+- OCR character recognition (PyTesseract)
+- Dictionary lookup for Meanings, readings (JamDict)
 
 ### Features needed to be considered finished:
 
-- .env file with configurations
-- ~~Improve Image Handling~~ Done
-  - ~~Current implementation is for testing, saves over images~~
-- OCR character recognition
-  - PyTesseract, currently working in a version on the side but yet to be integrated
-- Dictionary lookup for Meanings, Vocab, Onyomi/Kunyomi readings, and any other information
-  - JamDict works well, uses JMDict which I originally planned to download and use before finding it.
+- Flesh out .env file with configurations
+- Get related vocab
 - Export Kanji to file for Anki flashcard deck
 - Interactable menu of currently selected Kanji
 - Logging
@@ -44,7 +43,6 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
 - Web version?
 - Train and use my own image-recognition model based on Kuzushiji-Kanji dataset or Kuzushiji-MNIST dataset
   - Scary, this is a far-future goal.
-- More things I cannot remember currently, but will update when I do.
 
 Please read before using:
 I am not liable for anything that breaks, including any lost files or damage that this may cause on your device. I'm designing it as a side project, and it will probably have some bugs and issues for a little while. By using this software, you acknowledge that you understand this, and that this software is being developed purely for fun, and using it is at your own risk.

@@ -20,9 +20,15 @@ class Kanji:
 
 class KanjiLibrary:
 
-    kanji: List[Kanji] = []
+    kanji: dict = {}
 
     @classmethod
     def add(cls, kanji: Kanji):
         """ Add a kanji to the current list """
-        cls.kanji.append(kanji)
+        cls.kanji[kanji.character] = kanji
+
+    @classmethod
+    def delete(cls, character: str):
+        """ Delete a stored kanji """
+        cls.kanji.pop(character)
+        print("Deleted " + character)

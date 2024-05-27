@@ -22,7 +22,7 @@ class App:
             action=self.screenshotButtonAction,
             bgcolor="OliveDrab1"
         )
-        self.gui.createMenuButton(text="Kanji", action=self.gui.kanjiViewer)
+        self.gui.createMenuButton(text="Kanji", action=self.kanjiViewerButtonAction)
         self.gui.createMenuButton(text="Export", action=self.exportButtonAction)
         self.gui.createMenuButton(text="Exit", action=self.exitButtonAction)
         self.current_screenshot: Screenshot = None
@@ -52,6 +52,11 @@ class App:
         self.current_screenshot = Screenshot(ImageHandler.takeScreenshot())
         self.gui.restore()
         self.gui.screenshotEditor(title="Click & Drag to select Kanji", screenshot=self.current_screenshot, onfinish=self.finishSelection)
+
+    def kanjiViewerButtonAction(self):
+        """ Kanji Viewer Button Event """
+        self.gui.kanjiViewer(title="Current Kanji", onfinish=None)
+        
 
     def exportButtonAction(self):
         """ Export Button Event """

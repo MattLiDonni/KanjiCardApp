@@ -5,6 +5,7 @@ from PIL import ImageTk
 from PIL import Image as IM
 import os
 from kanjiapp.util import MouseHandler, ImageHandler, Screenshot
+from kanjiapp.kanji import Kanji, KanjiLibrary
 
 class GUI(Tk):
     """ Extends Tk() from tkinter, adds custom functionality for Kanji App """
@@ -59,6 +60,7 @@ class GUI(Tk):
         button.pack(fill="both", expand=True)
         self.components.append(button)
 
+    # TODO Create a general "secondary window" object
     def screenshotEditor(self, screenshot: Screenshot, master:Misc=None, title:str="Secondary Window", fullscreen:bool=True, onfinish:callable=None):
         """ Creates another window for editing/selecting from screenshots """
         self.screenshot = screenshot
@@ -82,8 +84,23 @@ class GUI(Tk):
 
         self.screenshotWindow.attributes("-fullscreen", True)
 
-    def kanjiViewer(self):
-        pass
+    def kanjiViewer(self, master:Misc=None, title:str="Secondary Window", onfinish:callable=None):
+        try:
+            self.kanjiwindow.destroy()
+        except AttributeError:
+            pass
+        self.kanjiwindow = Toplevel(master=self)
+        self.kanjiwindow.title(title)
+        self.onfinish = onfinish
+        self.kanjiwindow.geometry(f"800x500+{str(int(self.winfo_screenwidth()/3)-100)}+{str(int(self.winfo_screenheight()/3)-100)}")
+
+        if len(KanjiLibrary.kanji) == 0: Label(master=self.kanjiwindow, text="You don't have any characters defined yet!").pack(side="top")
+        else: Label(master=self.kanjiwindow, text="Click on an item to delete it from the current list").pack(side="top")
+
+        for character in KanjiLibrary.kanji:
+            KanjiListItem(master=self.kanjiwindow, character=character).pack()
+
+        Button(master=self.kanjiwindow, text="Exit", command=self.kanjiwindow.destroy, width=10, height=3).pack(side="bottom")
 
 
     # Mouse bind events
@@ -135,3 +152,15 @@ class GUI(Tk):
     def restore(self):
         """ Restore minimized window """
         self.deiconify()
+
+
+class KanjiListItem(Button):
+
+    def __init__(self, master, character):
+        super().__init__(master=master, text=KanjiLibrary.kanji[character], command=self.onClick, font=("Arial", 16))
+        self.character = character
+    
+    def onClick(self):
+        KanjiLibrary.delete(self.character)
+        self.destroy()
+        

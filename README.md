@@ -18,17 +18,16 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
 
 - Simple tkinter GUI (Done, needs overhaul in near future)
 - Screenshot and display on a window (Done)
-- Click and drag selection of Kanji (Similar to rectangle select in Snipping Tool)
-  - Click and drag to select characters, right click to undo
-- OCR character recognition (PyTesseract)
-- Dictionary lookup for Meanings, readings (JamDict)
+- Click and drag selection of Kanji, similar to rectangle select in Snipping Tool (Done)
+- OCR character recognition (PyTesseract) (Done)
+- Dictionary lookup for Meanings, readings (JamDict) (Done)
+- Export Kanji to file for Anki flashcard deck (WIP but functional)
+- Interactable menu of currently selected characters (WIP but functional)
 
 ### Features needed to be considered finished:
 
 - Flesh out .env file with configurations
 - Add related vocab
-- Export Kanji to file for Anki flashcard deck
-- Interactable menu of currently selected Kanji
 - Logging
 
 ### Potential features after being finished:

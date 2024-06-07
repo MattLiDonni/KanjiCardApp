@@ -4,7 +4,7 @@ import sys
 import time
 from dotenv import load_dotenv
 from kanjiapp.gui import GUI
-from kanjiapp.util import ImageHandler, Screenshot
+from kanjiapp.util import ImageHandler, Screenshot, ExportDeck
 from kanjiapp.kanji import Kanji, KanjiLibrary
 from kanjiapp.ocr import KanjiReader
 from kanjiapp.dictionary import KanjiLookup
@@ -55,12 +55,17 @@ class App:
 
     def kanjiViewerButtonAction(self):
         """ Kanji Viewer Button Event """
+        if len(KanjiLibrary.kanji) < 1:
+            return self.gui.notify_popup("You haven't screenshotted any characters yet!")
         self.gui.kanjiViewer(title="Current Kanji", onfinish=None)
         
 
     def exportButtonAction(self):
         """ Export Button Event """
-        print("export")
+        export_result = ExportDeck.export(KanjiLibrary.kanji)
+        if export_result != True:
+            self.gui.notify_popup(export_result)
+        
 
     # button action could be just "exit", but potential future logging/clean up might be needed.
     def exitButtonAction(self):

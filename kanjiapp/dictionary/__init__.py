@@ -14,6 +14,6 @@ class KanjiLookup:
             readings.append(reading.kana_forms)
 
         kanji.meanings = result.chars[0].meanings(english_only=True)
-        kanji.readings = readings
+        kanji.readings = readings[0]
 
         return kanji

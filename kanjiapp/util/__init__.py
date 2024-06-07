@@ -2,6 +2,7 @@
 import pyautogui
 from PIL import Image, ImageTk
 from typing import List
+from kanjiapp.kanji import Kanji
 
 class Screenshot:
 
@@ -73,3 +74,27 @@ class MouseHandler:
         if cls.button1_down:
             return event.x, event.y
         return None
+
+class ExportDeck:
+
+    @staticmethod
+    def export(dictionary: dict[str, Kanji]):
+        if len(dictionary) < 1:
+            return "Nothing to export!"
+        front_open_element = "<japanese>"
+        front_close_element = "</japanese>"
+
+        with open("exported_deck.txt", "w", encoding="utf-8") as deck:
+            deck.write("#separator:tab\n#html:true\n#tags column:4\n")
+            for item in dictionary:
+                kanji = dictionary[item]
+                readings = ""
+                for reading in kanji.readings:
+                    readings += reading.text
+                    if reading.text != kanji.readings[-1].text: readings += ", "
+                deck.write(
+                    f"{front_open_element}{kanji.character}{front_close_element}\t"\
+                    + f"Readings: [{readings}] Meanings: [{', '.join(kanji.meanings)}]\t\n"\
+                    )
+        return True
+                        

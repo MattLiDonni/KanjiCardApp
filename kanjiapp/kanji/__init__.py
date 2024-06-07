@@ -3,7 +3,7 @@ from typing import List
 
 class Kanji:
 
-    def __init__(self, character:str, meanings:str=None, readings:List[str]=None, crop:Image=None):
+    def __init__(self, character:str, meanings:List[str]=None, readings:List[str]=None, crop:Image=None):
         self.character = character
         self.meanings = meanings
         self.readings = readings
@@ -20,7 +20,7 @@ class Kanji:
 
 class KanjiLibrary:
 
-    kanji: dict = {}
+    kanji: dict[str, Kanji] = {}
 
     @classmethod
     def add(cls, kanji: Kanji):

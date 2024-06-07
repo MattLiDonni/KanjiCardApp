@@ -1,6 +1,6 @@
 """ GUI for Kanji App, contains GUI functions and some other things that should be seperated in the future """
 
-from tkinter import Tk, Label, Button, Misc, Image, Toplevel, Canvas, NW
+from tkinter import Tk, Label, Button, Misc, Image, Toplevel, Canvas, NW, messagebox
 from PIL import ImageTk
 from PIL import Image as IM
 import os
@@ -91,7 +91,7 @@ class GUI(Tk):
             pass
         self.kanjiwindow = Toplevel(master=self)
         self.kanjiwindow.title(title)
-        self.onfinish = onfinish
+        self.kanjiwindow.onfinish = onfinish
         self.kanjiwindow.geometry(f"800x500+{str(int(self.winfo_screenwidth()/3)-100)}+{str(int(self.winfo_screenheight()/3)-100)}")
 
         if len(KanjiLibrary.kanji) == 0: Label(master=self.kanjiwindow, text="You don't have any characters defined yet!").pack(side="top")
@@ -101,6 +101,12 @@ class GUI(Tk):
             KanjiListItem(master=self.kanjiwindow, character=character).pack()
 
         Button(master=self.kanjiwindow, text="Exit", command=self.kanjiwindow.destroy, width=10, height=3).pack(side="bottom")
+
+    def notify_popup(self, message, title:str=None):
+        """ Popup prompt """
+        if title is None:
+            title = message
+        messagebox.showinfo(title, message)
 
 
     # Mouse bind events

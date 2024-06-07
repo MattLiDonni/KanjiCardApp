@@ -9,10 +9,13 @@ If you're reading something online, or playing a visual novel, and you come acro
 The ideal steps of this programs usage would be
 Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatically looks up and fills in Kanji information > Open selected Kanji menu and look over all characters > Press export > Open Anki > Import Deck > Import the exported file
 
-### Current Issues:
+### Known Issues:
 
+- Adding multiple characters can freeze program after exiting screenshot screen (will use multiprocessing to fix this very soon)
 - Tests are failing in Github Actions since a virtual display is needed for many functionalities, testing currently with pyvirtualdisplay
   - Currently put off to work on other features, will possibly change existing features to allow testing without the need for a virtual display.
+- When a character fails to read, it can brick the program (Due to uncaught errors when reading characters from image, as well as some other implementation issues I want to fix)
+- Probably many others
 
 ### Feature progress:
 
@@ -39,7 +42,6 @@ Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatica
   - Add Kanji manually that autofill with information.
 - Edit information returned by JamDict.
 - Edit raw version of export file before exporting
-- Web version?
 - Train and use my own image-recognition model based on Kuzushiji-Kanji dataset or Kuzushiji-MNIST dataset
   - Scary, this is a far-future goal.
 

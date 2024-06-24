@@ -8,15 +8,11 @@ I've started recently learning Japanese, and the one issue I've had was forcing 
 It's exhaustive, and even if writing them does help with memorizing them, I figured it would be much more fun to turn into this project.
 If you're reading something online, or playing a visual novel, and you come across a Kanji you don't know, you can just have this program open on the side, press screenshot, select the Kanji or Vocab, get the definition so you can keep reading, and later when you want to study you've got it already in an Anki deck.
 
-The ideal steps of this programs usage would be
-Main Menu > Screenshot > Window opens > Select Kanji > Press Finish > Automatically looks up and fills in Kanji information > Open selected Kanji menu and look over all characters > Press export > Open Anki > Import Deck > Import the exported file
-
 ### Known Issues:
 
 - Adding multiple characters can freeze program after exiting screenshot screen (will use multiprocessing to fix this very soon)
 - Tests are failing in Github Actions since a virtual display is needed for many functionalities, testing currently with pyvirtualdisplay
   - Currently put off to work on other features, will possibly change existing features to allow testing without the need for a virtual display.
-- When a character fails to read, it can brick the program (Due to uncaught errors when reading characters from image, as well as some other implementation issues I want to fix)
 - Probably many others
 
 ### Feature progress:

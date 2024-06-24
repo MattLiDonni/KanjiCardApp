@@ -1,6 +1,33 @@
 """ Simpler functions that are easier to seperate to prevent cluttering other classes """
 import pyautogui
-from PIL import Image
+from tkinter import filedialog
+from PIL import Image, ImageTk
+from typing import List
+from kanjiapp.kanji import Kanji
+import logging
+
+
+class Screenshot:
+
+    def __init__(self, image:Image):
+        self.image = image
+        self.imagetk = ImageTk.PhotoImage(image=self.image)
+        self.selections: List[tuple] = []
+
+    def getImageTk(self) -> ImageTk.PhotoImage:
+        return self.imagetk
+
+    def addSelection(self, x0:int, y0:int, x1:int, y1:int) -> bool:
+        coordinates = ImageHandler.coordinate_correction(x0, y0, x1, y1)
+        self.selections.append(coordinates)
+        return True
+    
+    def getSelections(self) -> List[tuple]:
+        return self.selections
+
+    def popSelection(self) -> tuple:
+        return self.selections.pop()
+
 
 class ImageHandler:
     """ Handles screenshotting and images """
@@ -8,7 +35,6 @@ class ImageHandler:
     def takeScreenshot() -> Image.Image:
         img = pyautogui.screenshot()
         print(type(img))
-        img.save("img/screenshot.png")
         return img
 
     @staticmethod
@@ -30,6 +56,7 @@ class ImageHandler:
         try:
             return image.crop(top_left + bottom_right)
         except ValueError:
+            logging.debug(f"Failed to crop: ({top_left}, {bottom_right})")
             return 0
 
 class MouseHandler:
@@ -37,17 +64,43 @@ class MouseHandler:
     @classmethod
     def leftClick(cls, event):
         cls.button1_down = True
-        print("LeftClick - " + str(event.x) + ", " + str(event.y))
+        logging.debug("LeftClick - " + str(event.x) + ", " + str(event.y))
         return event.x, event.y
 
     @classmethod
     def release(cls, event):
         cls.button1_down = False
-        print("Released - " + str(event.x) + ", " + str(event.y))
+        logging.debug("Released - " + str(event.x) + ", " + str(event.y))
         return event.x, event.y
 
     @classmethod
-    def mouseMotion(cls, event):
+    def mouseMotion(cls, event): # Click and drag
         if cls.button1_down:
             return event.x, event.y
         return None
+
+class ExportDeck:
+
+    @staticmethod
+    def export(dictionary: dict[str, Kanji]):
+        if len(dictionary) < 1:
+            return "Nothing to export!"
+        
+        export_dir = filedialog.askdirectory(title="Choose an export destination")
+        if not export_dir:
+            return "No location selected, canceled export."
+        export_dir += "/exported_deck.csv"
+
+        with open(export_dir, "w", encoding="utf-8") as deck:
+            deck.write("#separator:comma\n")
+            for item in dictionary:
+                kanji = dictionary[item]
+                readings = ""
+                for reading in kanji.readings:
+                    readings += reading.text
+                    if reading.text != kanji.readings[-1].text: readings += "、"
+                deck.write(f"{kanji.character},{readings},\"{', '.join(kanji.meanings)}\"\t\n")
+                           
+        logging.debug(f"Exported to {export_dir}")
+        return True
+                        

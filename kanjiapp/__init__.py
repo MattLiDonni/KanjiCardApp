@@ -47,9 +47,14 @@ class App:
     def finishSelection(self):
         """ Callback function from screenshot-selection window """
         for coordinates in self.current_screenshot.selections:
-            crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
-            character = KanjiReader.read_image(crop)
-            KanjiLibrary.add(KanjiLookup.define(character))
+            try:
+                crop = ImageHandler.cropImage(self.current_screenshot.image, *coordinates[0] + coordinates[1])
+                character = KanjiReader.read_image(crop)
+                KanjiLibrary.add(KanjiLookup.define(character))
+            except IndexError:
+                logging.warning("Failed to properly read selection.")
+            except ValueError:
+                logging.warning("No character found in selection.")
         
         print(KanjiLibrary.kanji)
             
@@ -77,6 +82,8 @@ class App:
         export_result = ExportDeck.export(KanjiLibrary.kanji)
         if export_result != True:
             self.gui.notify_popup(export_result)
+        else:
+            self.gui.notify_popup(title="Success!", message=f"Successfully exported data.")
         
 
     # button action could be just "exit", but potential future logging/clean up might be needed.

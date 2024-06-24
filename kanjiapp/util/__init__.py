@@ -1,9 +1,11 @@
 """ Simpler functions that are easier to seperate to prevent cluttering other classes """
 import pyautogui
+from tkinter import filedialog
 from PIL import Image, ImageTk
 from typing import List
 from kanjiapp.kanji import Kanji
 import logging
+
 
 class Screenshot:
 
@@ -52,9 +54,9 @@ class ImageHandler:
     def cropImage(image: Image, x0:int, y0:int, x1:int, y1:int) -> Image:
         top_left, bottom_right = ImageHandler.coordinate_correction(x0, y0, x1, y1)
         try:
-            logging.debug(f"Failed to crop: ({top_left}, {bottom_right})")
             return image.crop(top_left + bottom_right)
         except ValueError:
+            logging.debug(f"Failed to crop: ({top_left}, {bottom_right})")
             return 0
 
 class MouseHandler:
@@ -72,7 +74,7 @@ class MouseHandler:
         return event.x, event.y
 
     @classmethod
-    def mouseMotion(cls, event):
+    def mouseMotion(cls, event): # Click and drag
         if cls.button1_down:
             return event.x, event.y
         return None
@@ -83,10 +85,13 @@ class ExportDeck:
     def export(dictionary: dict[str, Kanji]):
         if len(dictionary) < 1:
             return "Nothing to export!"
-        front_open_element = "<japanese>"
-        front_close_element = "</japanese>"
+        
+        export_dir = filedialog.askdirectory(title="Choose an export destination")
+        if not export_dir:
+            return "No location selected, canceled export."
+        export_dir += "/exported_deck.csv"
 
-        with open("exported_deck.csv", "w", encoding="utf-8") as deck:
+        with open(export_dir, "w", encoding="utf-8") as deck:
             deck.write("#separator:comma\n")
             for item in dictionary:
                 kanji = dictionary[item]
@@ -96,6 +101,6 @@ class ExportDeck:
                     if reading.text != kanji.readings[-1].text: readings += "、"
                 deck.write(f"{kanji.character},{readings},\"{', '.join(kanji.meanings)}\"\t\n")
                            
-        logging.debug("Exported to exported_deck.csv")
+        logging.debug(f"Exported to {export_dir}")
         return True
                         

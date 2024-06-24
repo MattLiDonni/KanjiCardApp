@@ -4,7 +4,7 @@
 
 Video Demo: https://youtu.be/fTAXm9lV094
 
-I've started recently learning Japanese, and the one issue I've had was forcing myself to make flashcards. Kanji are logographic characters, and not only are they crucial to reading Japanese, but there's around 2000 of them that are commonly taught and considered important for daily use.
+I've started recently learning Japanese, and the one issue I've had was forcing myself to make flashcards. Kanji are logographic characters, and not only are they crucial to reading Japanese, but while theres thousands of them, there's around 2000 of them that are commonly taught and considered important for daily use.
 It's exhaustive, and even if writing them does help with memorizing them, I figured it would be much more fun to turn into this project.
 If you're reading something online, or playing a visual novel, and you come across a Kanji you don't know, you can just have this program open on the side, press screenshot, select the Kanji or Vocab, get the definition so you can keep reading, and later when you want to study you've got it already in an Anki deck.
 

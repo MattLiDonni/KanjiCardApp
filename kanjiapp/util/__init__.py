@@ -3,6 +3,7 @@ import pyautogui
 from PIL import Image, ImageTk
 from typing import List
 from kanjiapp.kanji import Kanji
+import logging
 
 class Screenshot:
 
@@ -51,6 +52,7 @@ class ImageHandler:
     def cropImage(image: Image, x0:int, y0:int, x1:int, y1:int) -> Image:
         top_left, bottom_right = ImageHandler.coordinate_correction(x0, y0, x1, y1)
         try:
+            logging.debug(f"Failed to crop: ({top_left}, {bottom_right})")
             return image.crop(top_left + bottom_right)
         except ValueError:
             return 0
@@ -60,13 +62,13 @@ class MouseHandler:
     @classmethod
     def leftClick(cls, event):
         cls.button1_down = True
-        print("LeftClick - " + str(event.x) + ", " + str(event.y))
+        logging.debug("LeftClick - " + str(event.x) + ", " + str(event.y))
         return event.x, event.y
 
     @classmethod
     def release(cls, event):
         cls.button1_down = False
-        print("Released - " + str(event.x) + ", " + str(event.y))
+        logging.debug("Released - " + str(event.x) + ", " + str(event.y))
         return event.x, event.y
 
     @classmethod
@@ -84,17 +86,16 @@ class ExportDeck:
         front_open_element = "<japanese>"
         front_close_element = "</japanese>"
 
-        with open("exported_deck.txt", "w", encoding="utf-8") as deck:
-            deck.write("#separator:tab\n#html:true\n#tags column:4\n")
+        with open("exported_deck.csv", "w", encoding="utf-8") as deck:
+            deck.write("#separator:comma\n")
             for item in dictionary:
                 kanji = dictionary[item]
                 readings = ""
                 for reading in kanji.readings:
                     readings += reading.text
-                    if reading.text != kanji.readings[-1].text: readings += ", "
-                deck.write(
-                    f"{front_open_element}{kanji.character}{front_close_element}\t"\
-                    + f"Readings: [{readings}] Meanings: [{', '.join(kanji.meanings)}]\t\n"\
-                    )
+                    if reading.text != kanji.readings[-1].text: readings += "、"
+                deck.write(f"{kanji.character},{readings},\"{', '.join(kanji.meanings)}\"\t\n")
+                           
+        logging.debug("Exported to exported_deck.csv")
         return True
                         

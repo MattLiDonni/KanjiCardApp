@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import logging
 from dotenv import load_dotenv
 from kanjiapp.gui import GUI
 from kanjiapp.util import ImageHandler, Screenshot, ExportDeck
@@ -15,6 +16,18 @@ class App:
     def __init__(self):
         load_dotenv()
         os.environ["VERSION"] = "0.1.0"
+        
+        if not os.getenv("LOG_DIRECTORY"):
+            os.environ["LOG_DIRECTORY"] = "."
+        logging_level = logging.DEBUG if os.getenv("DEBUG") == "True" else logging.INFO
+        logging.basicConfig(level=logging_level, 
+                            filename=f"{os.getenv('LOG_DIRECTORY')}/kanjiapp.log", 
+                            filemode="w",
+                            format="%(asctime)s (%(levelname)s) - %(message)s")
+        
+        logging.info("Application Started")
+        logging.debug("Debug enabled")
+
         self.gui = GUI()
         self.gui.createLabel(text="Screenshot and select Kanji to export to Anki")
         self.gui.createMenuButton(
@@ -58,7 +71,6 @@ class App:
         if len(KanjiLibrary.kanji) < 1:
             return self.gui.notify_popup("You haven't screenshotted any characters yet!")
         self.gui.kanjiViewer(title="Current Kanji", onfinish=None)
-        
 
     def exportButtonAction(self):
         """ Export Button Event """
